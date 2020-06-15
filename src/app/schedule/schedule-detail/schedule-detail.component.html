@@ -1,0 +1,55 @@
+<div class="p-grid">
+  <div class="p-col-6 p-offset-3">
+    <form [formGroup]="scheduleForm" (ngSubmit)="save(scheduleForm.value)">
+      <p-panel>
+        <p-header>
+          <span class="ui-panel-title">{{'SCHEDULEDETAIL' | translate}}</span>
+        </p-header>
+        <div class="content-section implementation ui-fluid">
+          <div class="forms-grid">
+            <div class="p-col-12">
+              <div>{{'FULLNAME' | translate}}</div>
+              <input type="text" formControlName="fullName" pInputText />
+              <p-message severity="error" text="Full name is required"
+                *ngIf="!scheduleForm.controls['fullName'].valid&&scheduleForm.controls['fullName'].dirty"></p-message>
+            </div>
+            <div class="p-col-12">
+              <div>{{'MEETINGDATE' | translate}}</div>
+              <p-calendar formControlName="meetingDate" readonlyInput="true" [showIcon]="true" [minDate]="minDateValue"
+                dateFormat="dd/mm/yy">
+              </p-calendar>
+              <p-message severity="error" text="Meeting date is required"
+                *ngIf="!scheduleForm.controls['meetingDate'].valid&&scheduleForm.controls['meetingDate'].dirty">
+              </p-message>
+            </div>
+            <div class="p-col-12">
+              <div>{{'STARTTIME' | translate}}</div>
+              <p-calendar formControlName="startTime" readonlyInput="true" [minDate]="minDateValue" timeOnly="true"
+                icon="pi pi-clock" [showTime]="true" [showIcon]="true" (onBlur)="validateEndTime();">
+              </p-calendar>
+              <p-message severity="error" text="start time is required"
+                *ngIf="!scheduleForm.controls['startTime'].valid&&scheduleForm.controls['startTime'].dirty">
+              </p-message>
+            </div>
+            <div class="p-col-12">
+              <div>{{'ENDTIME' | translate}}</div>
+              <p-calendar formControlName="endTime" readonlyInput="true" [minDate]="minEndTime" timeOnly="true"
+                icon="pi pi-clock" [showTime]="true" [showIcon]="true"></p-calendar>
+              <p-message severity="error" text="End time is required"
+                *ngIf="!scheduleForm.controls['endTime'].valid&&scheduleForm.controls['endTime'].dirty">
+              </p-message>
+            </div>
+          </div>
+        </div>
+        <p-footer>
+          <div class="ui-helper-clearfix">
+            <button pButton type="button" style="float: right" label="{{'CANCEL' | translate}}"
+              class="ui-button-secondary" (click)="goToList()"></button>
+            <button pButton type="submit" style="float: right;;margin-right: 10px;" label="{{'SAVE' | translate}}"
+              [disabled]="!scheduleForm.valid"></button>
+          </div>
+        </p-footer>
+      </p-panel>
+    </form>
+  </div>
+</div>

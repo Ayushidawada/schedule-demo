@@ -1,0 +1,12 @@
+<p-toast></p-toast>
+<div class="p-grid">
+  <div class="p-col-12">
+
+    <p-dropdown [style]="{'float':'right'}" [options]="languageList" [(ngModel)]="selectedLanguage" optionLabel="text"
+      dataKey="value" (onChange)="languageChange()">
+    </p-dropdown>
+
+  </div>
+</div>
+
+<router-outlet></router-outlet>

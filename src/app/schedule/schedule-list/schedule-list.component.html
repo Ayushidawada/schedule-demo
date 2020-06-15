@@ -1,0 +1,72 @@
+<div class="p-grid">
+  <div class="p-col-12">
+    <p-panel>
+      <p-header>
+        <div class="ui-helper-clearfix">
+          <span class="ui-panel-title">{{'SCHEDULELIST' | translate}}</span>
+          <button pButton class="ui-button-info" style="float: right;" label="{{'ADD'|translate}}"
+            (click)="addNew()"></button>
+          <p-dropdown [style]="{'float': 'right', 'margin-right':'10px'}" [options]="availableTimeZones"
+            [(ngModel)]="selectedTimeZone" filter="true" (onChange)="updateList()">
+            <ng-template let-item pTemplate="selectedItem">
+              <span>{{item.label}}</span>
+            </ng-template>
+            <ng-template let-availableTimeZone pTemplate="item">
+              <div class="ui-helper-clearfix">
+                <div>{{availableTimeZone.label}}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+
+        </div>
+      </p-header>
+      <p-table #dt [columns]="cols" [value]="scheduleList" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="caption">
+          <div style="text-align: right">
+            <em class="pi pi-search" style="margin:4px 4px 0 0"></em>
+            <input type="text" pInputText size="50" [placeholder]="'SEARCH' | translate"
+              (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th scope *ngFor="let col of columns" [pSortableColumn]="col.field">
+              {{ col.header | translate}}
+              <p-sortIcon [field]="col.field">
+              </p-sortIcon>
+            </th>
+            <th scope>{{'ACTIONS' | translate}}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-schedule let-columns="columns">
+          <tr [pSelectableRow]="schedule">
+            <td *ngFor="let col of columns" [ngSwitch]="col.field">
+              <span *ngSwitchCase="'meetingDate'">
+                {{schedule[col.field] | date:"dd/MM/yyyy"}}
+              </span>
+              <!--
+                NOTE: Cuttently not applied the date pipe to format the time column.
+                Facing the issue to format the date correctly. Need to do more R & D on that. So for now shown
+                the whole date and time object which shows the date in the selected time zone.
+              -->
+              <!-- <span *ngSwitchCase="col.field === 'startTime' || col.field === 'endTime' ? col.field : ''">
+                {{schedule[col.field] | date:"HH:mm" }}
+              </span> -->
+              <span *ngSwitchDefault>
+                {{schedule[col.field]}}
+              </span>
+            </td>
+            <td style="text-align: center;">
+              <button pButton type="button" icon="pi pi-pencil" style="margin-right:10px"
+                (click)="goToDetail(schedule.id)"></button>
+              <button pButton type="button" icon="pi pi-trash" class="ui-button-danger"
+                (click)="openConfirmDialog(schedule.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+    </p-panel>
+    <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+  </div>
+</div>
